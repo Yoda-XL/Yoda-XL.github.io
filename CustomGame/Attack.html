@@ -1,0 +1,41 @@
+<html>
+<head>
+<title> Custom Game </title>
+<script src="https://simplycodingcourses.com/files/simply.js"></script>
+<script>
+function start(){
+sjs.open("target",600,400);
+var background = new sjs.Image("Images/background.jpg");
+background.setSize(sjs.getWidth(), sjs.getHeight());
+
+//Sans
+var sans = new sjs.Image("Images/Sans.gif");
+sans.top()
+sans.setSize(140,140);
+sans.x = 225;
+
+//Fight
+
+var fightbtn = new sjs.Image("Images/fight.png");
+fightbtn.bottom();
+fightbtn.moveTo(235,200);
+fightbtn.setSize(160,160);
+
+sjs.keyDown(Z_KEY, function(){
+var attack = new sjs.Image("Images/atkani.gif");
+attack.setSize(600,150);
+setTimeout(function(){
+window.location = "StartPage.html";
+},38500);
+});
+var fighttxt = new sjs.Text("Press Z", 30,"white")
+fighttxt.bottom();
+} //end start
+</script>
+</head>
+<body onload="start()">
+<h1> Custom Game </h1>
+
+<div id="target" style="margin:auto;background:grey;"></div>
+</body>
+</html> 

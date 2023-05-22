@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Custom Game </title>
+<script src="https://simplycodingcourses.com/files/simplyjs/simply.js"></script>
+<script>
+function start(){
+sjs.open("target", 600,400);
+
+
+//Music
+
+var playM = new Audio('Music/Megalovania.mp3');
+var toggle = true;
+var musicOn = false;
+sjs.keyDown(SPACE_KEY, function(){
+	if(toggle == true){
+		if(musicOn == false){
+			playM.play();
+			musicOn = true
+		} else {
+			playM.pause();
+			musicOn = false;
+		}
+		toggle = false;
+		setTimeout(function(){
+			toggle = true;
+		},1000);
+	} //end if toggle statement
+}); //end keyDown function
+
+var background = new sjs.Image("Images/background.jpg");
+background.setSize(sjs.getWidth(), sjs.getHeight());
+
+//Sans
+var sans = new sjs.Image("Images/Sans.gif");
+sans.top()
+sans.setSize(140,140);
+sans.x = 225;
+
+//White Bar
+var bar = new sjs.Image("Images/Bar.png");
+bar.setSize(600,25);
+bar.y = 135;
+
+//Player Properties
+var player = new sjs.Image("Images/player.png");
+player.type = "player";
+player.setSize(20,20);
+player.setGravity(3);
+player.bottom();
+player.friction = 0.3;
+player.accel = 0.25;
+player.noBounds = true;
+
+var r_facing = true;
+var r_track = 0;
+var l_track = 0;
+
+sjs.keyDown(RIGHT_KEY, function(){
+	r_facing = true;
+	r_track = r_track + 1;
+	player.pushRight(0.9);
+	if(r_track == 7){
+		r_track = 0;
+	}
+});
+
+sjs.keyDown(LEFT_KEY, function(){
+	r_facing = false;
+	l_track = l_track + 1;
+	player.pushLeft(0.9);
+	if(l_track == 7){
+		l_track = 0;
+	}
+});
+
+var canJump = true;
+sjs.keyDown(UP_KEY, function(){
+	if(canJump == true){
+		canJump = false;
+		player.pushUp(20);
+	}
+});
+
+
+sjs.onHit("player","bottom_screen",function(x,y){
+	sjs.stoppedBy(x,y);
+	if(canJump == false){
+		canJump = true;
+		r_track = 0;
+		l_track = 0;
+	}
+});
+
+sjs.onHit("player",["right_screen","left_screen","top_screen"],function(x,y){
+	sjs.stoppedBy(x,y);
+});
+
+//Health
+var healthmax = 100;
+var healthmax_txt = new sjs.Text("Health: " + healthmax, 30,"white")
+sjs.onHit("player","enemy", function(x,y){
+	healthmax = healthmax - 4
+	healthmax_txt.setText("Health: "+healthmax);
+});
+
+setInterval(function(){
+if(healthmax < 0){
+window.location = "Gameover.html";
+}
+},500);
+//End health
+
+setTimeout(function(){
+window.location = "Attack.html";
+},60000);
+
+//Bones
+setInterval(function boneFunction(){
+	var speed = Math.round(2 + Math.random()*10);
+if(Math.random() > 0){
+	var enemy = new sjs.Image("Images/Bone.png");
+	var enemy2 = new sjs.Image("Images/Bone2.png");
+	enemy.type = "enemy";
+	enemy.setSize(30,75);
+	enemy.noBounds = true;
+	enemy.friction = 0;
+	enemy.pushLeft(speed);
+	enemy.bottom()
+	enemy.moveTo(602,345);
+	enemy2.type = "enemy2";
+	enemy2.setSize(30,105);
+	enemy2.noBounds = true;
+	enemy2.friction = 0;
+	enemy2.pushLeft(speed);
+	enemy2.top()
+	enemy2.moveTo(602,155);
+}
+},1000);
+
+} //end start
+</script>
+</head>
+<body onload="start()">
+<h1> Custom Game </h1>
+
+<div id="target" style="margin:auto;background:grey;"></div>
+</body>
+</html>
